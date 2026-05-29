@@ -5,8 +5,8 @@ import { MdFrontHand } from "react-icons/md";
 import DateRangePicker from "./UI/DateRangePicker";
 import { useState, useEffect } from "react";
 
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "./UI/Card";
-import { Button } from "./UI/Button";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "./UI/card";
+
 import { GoProjectRoadmap } from "react-icons/go";
 import { IoMdArrowDropup } from "react-icons/io";
 import { MdPhotoSizeSelectLarge } from "react-icons/md";
