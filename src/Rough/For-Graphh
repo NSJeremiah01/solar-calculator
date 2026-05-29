@@ -1,0 +1,51 @@
+{ For Graph}
+
+<div>
+  <span className="inline-block">System Overview</span>
+</div>
+<div>
+  <select name="days" id="day-select">
+    <option value="monday">Monday</option>
+    <option value="tuesday">Tuesday</option>
+    <option value="wednesday">Wednesday</option>
+    <option value="thurseday">Thurseday</option>
+    <option value="friday">Friday</option>
+    <option value="saturday">Saturday</option>
+    <option value="sunday">Sunday</option>
+
+  </select>
+</div>
+</div>
+
+<div className="pt-4 flex gap-2 ">
+  <div className="flex gap-2 flex-col ">
+    <span className="flex items-center">
+      <BsDot className="text-blue-500 text-2xl animate-pulse " />
+      <p className="flex justify-center text-xs whitespace-nowrap">Energy Produced</p>
+    </span>
+    <p className="pl-6 font-bold text-sm">4,562kWh</p>
+  </div>
+
+  <div className="flex gap-2 flex-col">
+    <span className="flex items-center">
+      <BsDot className="text-green-500 text-2xl animate-pulse " />
+      <p className="flex justify-center text-xs whitespace-nowrap">Energy Consumed</p>
+    </span>
+    <p className="pl-6 font-bold text-sm">3,650kWh</p>
+  </div>
+
+  <div className="flex gap-2 flex-col">
+    <span className="flex items-center">
+      <BsDot className="text-yellow-500 text-2xl animate-pulse " />
+      <p className="flex justify-center text-xs whitespace-nowrap">From Solar</p>
+    </span>
+    <p className="pl-6 font-bold text-sm">3,245kWh</p>
+  </div>
+
+  <div className="flex gap-2 flex-col">
+    <span className="flex items-center">
+      <BsDot className="text-purple-500 text-2xl animate-pulse " />
+      <p className="flex justify-center text-xs whitespace-nowrap">From Grid</p>
+    </span>
+    <p className="pl-6 font-bold text-sm">405kWh</p>
+  </div>
