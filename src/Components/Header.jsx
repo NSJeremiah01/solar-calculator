@@ -1,4 +1,4 @@
-import { FaBeer } from 'react-icons/fa';
+
 import { PiSolarPanelFill,} from "react-icons/pi";
 import { GrHomeRounded } from "react-icons/gr";
 import { GoProjectRoadmap } from "react-icons/go";
@@ -14,61 +14,61 @@ import ElecNova from '../assets/ElecNova.jpeg'
 
 function Header() {
   return (  
-   <div className='px-2 bg-black text-white '>
-    <div className='h-auto w-full flex relative gap-10 py-6'>
+   <div className='px-4 lg:px-6 bg-black text-white '>
+    <div className='w-full flex  py-3  items-center justify-between'>
       
      <div>
         <PiSolarPanelFill /> <h1 className='relative inline-block  font-bold pr-10'>SolarCalc <span className='absolute bottom-0 left-12 top-5 text-sm font-semibold text-amber-300'>Pro</span></h1>
      </div>
 
-      <div className='flex gap-6'>
-        <span className=''>
-          <GrHomeRounded className='w-20 '/>
+      <div className='hidden md:flex gap-6'>
+        <span className='flex flex-col items-center text-xs cursor-pointer hover:text-amber-300'>
+          <GrHomeRounded className=' '/>
           <p>Dashboard</p>
         </span>
         
-        <span>
-          <GoProjectRoadmap className='w-15' />
+        <span className='flex flex-col items-center text-xs cursor-pointer hover:text-amber-300'>
+          <GoProjectRoadmap className='' />
           <p>Projects</p>
         </span>
         
-        <span>
-          <PiCalculatorThin className='w-18' />
+        <span className='flex flex-col items-center text-xs cursor-pointer hover:text-amber-300'>
+          <PiCalculatorThin className='' />
           <p>Calculator</p>
         </span>
         
-        <span>
-          <RiFundsBoxLine className='w-15' />
+        <span className='flex flex-col items-center text-xs cursor-pointer hover:text-amber-300'>
+          <RiFundsBoxLine className='' />
           <p>Financials</p>
         </span>
       
-        <span>
-        <LiaToolsSolid className='w-20' />
+        <span className='flex flex-col items-center text-xs cursor-pointer hover:text-amber-300'>
+        <LiaToolsSolid className='' />
         <p>Equipment</p>
         </span>
         
-        <span>
-         <PiBriefcaseThin className='w-15' />
+        <span className='flex flex-col items-center text-xs cursor-pointer hover:text-amber-300'>
+         <PiBriefcaseThin className='' />
          <p>Proposals</p>
         </span>
         
-        <span>
-          <PiUsersThreeLight className='w-10' />
+        <span className='flex flex-col items-center text-xs cursor-pointer hover:text-amber-300'>
+          <PiUsersThreeLight className='' />
           <p>Clients</p>
         </span>
 
       </div>
 
-      <div className='flex gap-6'>
-     <span className='relative block max-w-md '>
+      <div className='flex gap-6 '>
+     <span className='relative hidden sm:block'>
       <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
       <CiSearch  className='text-gray-400 text-xl'/>
       </div>
       <input type="text" placeholder='Serarch anything...' className='w-full pl-10 pr-4 py-1 mt-1.5 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500' />
      </span>
      
-     <span>
-      <IoMdNotificationsOutline />
+     <span className='flex items-center'>
+      <IoMdNotificationsOutline className='text-xl cursor-pointer hover:text-amber-300'/>
      </span>
 
        <span className='flex gap-2'>

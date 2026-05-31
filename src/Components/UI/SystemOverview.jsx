@@ -16,7 +16,7 @@ const data = [
 
 export default function SystemOverview() {
 return(
- <div className="w-150 h-80 mt-4  max-w-5xl p-6 bg-white rounded-2xl shadow-sm">
+ <div className="w-full mt-4  p-6 bg-white rounded-2xl shadow-sm">
    
    {/* Header Section */}
 

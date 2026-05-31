@@ -6,52 +6,66 @@ function Recommendations() {
 
 
   return ( 
-    <div className="w-150 h-auto  m-4 max-w-5xl p-6 bg-white rounded-2xl shadow-sm">
-     <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-bold text-gray-800">System Recommedations</h2>
-        <select className="px-3 py-1.5 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-600 focus:outline-none">
+    <div className="w-full  p-5 bg-white rounded-2xl shadow-sm">
+      
+     <div className="flex items-center justify-between mb-4">
+        <h2 className="text-lg font-bold text-gray-800">System Recommendations</h2>
+        <select className="px-2 py-1 text-xs bg-gray-50 border border-gray-200 rounded-lg text-gray-600 focus:outline-none">
         <option >View All</option>
         <option >Select View</option>
 
         </select>
      </div>
        
-      <div className="gap-4 flex flex-col">
-       <div className="flex justify-between w-138 h-40 items-center  max-w-5xl  px-2 bg-white rounded-2xl shadow-sm">
-         <div className="font-bold text-3xl px-2 -translate-y-10 text-emerald-600">
-          <RiBattery2ChargeLine />
-         </div>
+      <div className="gap-3 flex flex-col">
 
-         <div>
-          <h3 className="text-lg font-semibold text-gray-900 -translate-y-0.5">Increase Battery Capacity</h3>
 
-          <TextTruncate text={'Consider adding a battery storage system to store excess energy generated during the day for use at night or during cloudy days. And based on your load profile, increase battery capacity to 20kwh will improve backup by 35%'}  />
-          
-         </div>
-        
-          <button className="px-1 py-0.5  -translate-y-12 bg-emerald-500/10 text-emerald-600 rounded-lg focus:outline-none">
-            Recommended
-          </button>
+       <div className="flex flex-col gap-2   px-2 bg-white rounded-xl shadow-sm">
+          <div  className="flex items-start justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <RiBattery2ChargeLine className="text-emerald-600 text-xl shrink-0" />
+               <h3 className="text-sm font-semibold text-gray-900">Increase Battery Capacity</h3>
+            </div>
+               <span className="text-xs px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded-md shrink-0">
+              Recommended
+            </span>
+          </div> 
 
+            <div className="text-xs text-gray-500 leading-relaxed">
+             
+
+              <TextTruncate text={'Consider adding a battery storage system to store excess energy generated during the day for use at night or during cloudy days. And based on your load profile, increase battery capacity to 20kwh will improve backup by 35%'}  />
+              
+            </div>
+            
+              
        </div>
 
-        <div className="flex justify-between w-138 h-40 items-center  max-w-5xl  px-2 bg-white rounded-2xl shadow-sm">
-         <div className="font-bold text-3xl px-2 -translate-y-10 text-purple-600">
-          <RiBattery2ChargeLine />
-         </div>
+ <div className="flex flex-col gap-2   px-2 bg-white rounded-xl shadow-sm">
+          <div  className="flex items-start justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <RiBattery2ChargeLine className="text-purple-600 text-xl shrink-0" />
+               <h3 className="text-sm font-semibold text-gray-900">Upgrade to MPPT Controller</h3>
+            </div>
+               <span className="text-xs px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded-md shrink-0">
+              Recommended
+            </span>
+          </div> 
 
-         <div>
-          <h3 className="text-lg font-semibold text-gray-900 -translate-y-0.5">Upgrade to MPPT Controller</h3>
+            <div className="text-xs text-gray-500 leading-relaxed">
+             
 
-          <TextTruncate text={'Consider upgrading to an MPPT (Maximum Power Point Tracking) controller to improve the efficiency of your solar panel system. And based on your load profile, increase battery capacity to 20kwh will improve backup by 35%'}  />
-          
-         </div>
-        
-          <button className="px-1 py-0.5  -translate-y-12 bg-emerald-500/10 text-emerald-600 rounded-lg focus:outline-none">
-            Recommended
-          </button>
-
+              <TextTruncate text={'Consider upgrading to an MPPT (Maximum Power Point Tracking) controller to improve the efficiency of your solar panel system. And based on your load profile, increase battery capacity to 20kwh will improve backup by 35%'}  />
+              
+            </div>
+            
+              
        </div>
+
+
+
+
+       
 
 
 

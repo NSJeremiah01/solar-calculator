@@ -7,7 +7,7 @@ import { WiHumidity } from "react-icons/wi";
 function Weather() {
 
   return ( 
-  <div className="w-150 h-auto mt-4  max-w-5xl p-6 bg-white rounded-2xl shadow-sm">
+  <div className="w-full mt-4  p-6 bg-white rounded-2xl shadow-sm">
     <div>
       <h3 className="font-bold text-xl">Weather & Solar Conditions</h3>
       <p className="font-semibold text-black/50 text-sm">Lagos, Nigeria</p>

@@ -16,7 +16,7 @@ const MyPie = () => (
 
 export default function PieChartInGrid() {
   return (
-    <div className="w-150 h-80 mt-4 mx-4 max-w-5xl p-6 bg-white rounded-2xl shadow-sm" >
+    <div className="w-full mt-4 mx-4  p-5 bg-white rounded-2xl shadow-sm" >
       
        <h2 className="text-xl font-bold text-gray-800">Project Status</h2>
 

@@ -37,7 +37,7 @@ const getStatusStyles = (status) => {
 
 export default function RecentProjectsTable(){
  return (
- <Card className="w-150 h-80 max-w-5xl  p-6 bg-white mt-4 rounded-2xl shadow-sm">
+ <Card className="w-full  p-6 bg-white mt-4 rounded-2xl shadow-sm">
   
  <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0 px-2 pt-2">
   <CardTitle className="text-xl font-bold text-gray-900">Recent Project</CardTitle>

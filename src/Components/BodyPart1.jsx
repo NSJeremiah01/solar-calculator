@@ -25,15 +25,15 @@ function BodyPart1() {
 
   return ( 
 
-    <div className=" flex  ">
+    <div className=" flex flex-col xl:flex-row w-full gap-4">
        
-       <div>
+       <div clasName="flex flex-col gap-4 flex-1 min-w-0">
         <SystemOverview/>
         <RecentProjectsTable/>
         <Weather/>
       </div>
 
-        <div>
+        <div className="flex flex-col gap-4 w-full  xl:w-96 shrink-0">
         <PieChartInGrid/>
         <Recommendations/>
         </div>

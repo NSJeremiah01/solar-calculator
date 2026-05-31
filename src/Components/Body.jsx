@@ -26,7 +26,7 @@ function Body() {
     };
   return ( 
 <>
-  <div className="min-h-screen w-full px-2 mb-0 sm:px-6 lg:px-8">
+  <div className="w-full px-4 pb-8">
     <div className="flex items-center p-4 justify-between">
       <div className="">
       <div className="flex items-center">
@@ -46,9 +46,9 @@ function Body() {
     </div>
 
   </div>
-    <div className="flex gap-4 w-full ">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-4 ">
       <div>
-        <Card size="sm" className="mx-auto w-full max-w-sm  border-black-50 shadow-sm">
+        <Card  className="w-full border border-gray-100 shadow-sm">
           <CardHeader>
             <div className="flex items-center gap-2 ">
               <span className="bg-[#080838]/20 rounded-full p-2 ">
@@ -79,7 +79,7 @@ function Body() {
       </div>
 
         <div>
-        <Card size="sm" className="mx-auto w-full max-w-sm border-black-50 shadow-sm">
+        <Card className="w-full border border-gray-100 shadow-sm">
           <CardHeader>
             <div className="flex items-center gap-2 ">
               <span className="bg-green-50 rounded-full p-2 ">
@@ -110,7 +110,7 @@ function Body() {
       </div>
 
       <div>
-        <Card size="sm" className="mx-auto w-full max-w-sm border-black-50 shadow-sm">
+        <Card  className="w-full border border-gray-100 shadow-sm">
           <CardHeader>
             <div className="flex items-center gap-2 ">
               <span className="bg-[#a67c00]/20 rounded-full p-2 ">
@@ -141,7 +141,7 @@ function Body() {
       </div>
 
       <div>
-        <Card size="sm" className="mx-auto w-full max-w-sm border-black-50 shadow-sm">
+        <Card  className="w-full border border-gray-100 shadow-sm">
           <CardHeader>
             <div className="flex items-center gap-2 ">
               <span className="bg-green-50 rounded-full p-2 ">
@@ -172,7 +172,7 @@ function Body() {
       </div>
 
       <div>
-        <Card size="sm" className="mx-auto w-full max-w-sm border-black-50 shadow-sm">
+        <Card  className="w-full border border-gray-100 shadow-sm">
           <CardHeader>
             <div className="flex items-center gap-2 ">
               <span className="bg-[#080838]/30 rounded-full p-2 ">
