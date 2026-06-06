@@ -1,6 +1,6 @@
 import react from "react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
-
+// import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts';
 // Mock data tracking the dates matching your image
 
 const data = [
@@ -81,14 +81,14 @@ return(
 
 {/* 3. CHART CONTAINER */}
 
-  <div className="w-full h-25 relative">
+  <div className="w-full h-52 relative">
 
     {/*  Unit label placen on top of Y Axis  */}
 
     <span className="absolute left-10 -top-5 text-xs text-gray-400">KWh</span>
 
     <ResponsiveContainer width="100%" height="100%">
-     <LineChart data={data} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+     <AreaChart data={data} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
       <CartesianGrid vertical={false} stroke="#f0f0f0"/>
        <XAxis
        dataKey="name"
@@ -106,14 +106,12 @@ return(
        />
 
       {/* Smooth Curve Lines Matching colors */}
-      <Line type="monotone" dataKey="produced" stroke="#3b82f6" strokeWidth={2.5} dot={false}/>
-
-      <Line type="monotone" dataKey="consumed" stroke="#10b981" strokeWidth={2.5} dot={false}/>
-
-      <Line type="monotone" dataKey="solar" stroke="#fbbf24" strokeWidth={2.5} dot={false}/>
-      
-      <Line type="monotone" dataKey="grid" stroke="#a855f7" strokeWidth={2.5} dot={false}/>
-     </LineChart>
+      <Area type="monotone" dataKey="produced" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.1} strokeWidth={2} dot={false}/>
+      <Area type="monotone" dataKey="consumed" stroke="#10b981" fill="#10b981" fillOpacity={0.1} strokeWidth={2} dot={false}/>
+      <Area type="monotone" dataKey="solar"    stroke="#fbbf24" fill="#fbbf24" fillOpacity={0.1} strokeWidth={2} dot={false}/>
+      <Area type="monotone" dataKey="grid"     stroke="#a855f7" fill="#a855f7" fillOpacity={0.1} strokeWidth={2} dot={false}/>
+      <Tooltip />
+     </AreaChart>
     </ResponsiveContainer>
   </div>
   {/* 4 BOTTOM LEGEND ROW */}

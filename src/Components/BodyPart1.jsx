@@ -27,15 +27,16 @@ function BodyPart1() {
 
     <div className=" flex flex-col xl:flex-row w-full gap-4">
        
-       <div clasName="flex flex-col gap-4 flex-1 min-w-0">
+       <div clasName="flex flex-col gap-4 flex-1 min-w-0 max-w-[65%]">
         <SystemOverview/>
         <RecentProjectsTable/>
-        <Weather/>
+        
       </div>
 
-        <div className="flex flex-col gap-4 w-full  xl:w-96 shrink-0">
+        <div className="flex flex-col gap-4 w-full  xl:w-105 shrink-0">
         <PieChartInGrid/>
         <Recommendations/>
+        <Weather/>
         </div>
     </div>
 

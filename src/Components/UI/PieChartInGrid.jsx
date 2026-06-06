@@ -1,131 +1,68 @@
-import { PieChart, Pie, Label } from 'recharts';
-import { RechartsDevtools } from '@recharts/devtools';
+import { PieChart, Pie, Cell, Label } from 'recharts';
 
-// #region Sample data
 const data = [
-  { name: 'Group A', value: 300, fill: '#0088FE' },
-  { name: 'Group B', value: 400, fill: '#00C49F' },
-  { name: 'Group C', value: 220, fill: '#FFBB28' },
-  { name: 'Group D', value: 80, fill: '#FF8042' },
+  { name: 'Completed',   value: 10, color: '#10b981' },
+  { name: 'In Progress', value: 8,  color: '#3b82f6' },
+  { name: 'Proposal',    value: 4,  color: '#f59e0b' },
+  { name: 'On Hold',     value: 2,  color: '#a855f7' },
 ];
 
-// #endregion
-const MyPie = () => (
-  <Pie data={data} dataKey="value" nameKey="name" outerRadius="40%" innerRadius="20%" isAnimationActive={false} />
-);
+const total = data.reduce((sum, d) => sum + d.value, 0);
 
 export default function PieChartInGrid() {
   return (
-    <div className="w-full mt-4 mx-4  p-5 bg-white rounded-2xl shadow-sm" >
+    <div className="w-full p-5 mt-4 bg-white rounded-2xl shadow-sm">
       
-       <h2 className="text-xl font-bold text-gray-800">Project Status</h2>
+      <h2 className="text-xl font-bold text-gray-800 mb-4">Project Status</h2>
 
+      {/* Chart and Legend side by side */}
+      <div className="flex flex-row items-center gap-4 ">
 
-       {/* For The Full Contents */}
-
-      <div className='flex justify-between'>
-
-        <PieChart width={200} height={200} className="justify-center items-center my-6">
+        {/* LEFT — Pie Chart */}
+        <PieChart width={160} height={160} style={{outline:"none"}} accessibilityLayer={false}>
           <Pie
             data={data}
             dataKey="value"
-            nameKey="name"
-            outerRadius={100}
-            innerRadius={50}
+            outerRadius={75}
+            innerRadius={45}
             isAnimationActive={false}
+          className="focus:outline-none"
           >
+            {data.map((entry) => (
+              <Cell key={entry.name} fill={entry.color} />
+            ))}
             <Label
               position="center"
               content={(props) => {
-                const { cx = 100, cy = 100 } = props;
-
+                const { cx = 80, cy = 80 } = props;
                 return (
-                  <text
-                    x={cx}
-                    y={cy}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                  >
-                    <tspan
-                      x={cx}
-                      dy="-10"
-                      fontSize="20"
-                      fontWeight="500"
-                      fill="#111"
-                    >
-                      24
-                    </tspan>
-
-                    <tspan
-                      x={cx}
-                      dy="24"
-                      fontSize="12"
-                      fill="#666"
-                    >
-                      Total Projects
-                    </tspan>
+                  <text x={cx} y={cy} textAnchor="middle" dominantBaseline="middle">
+                    <tspan x={cx} dy="-8" fontSize="18" fontWeight="700" fill="#111">24</tspan>
+                    <tspan x={cx} dy="18" fontSize="10" fill="#999">Total Projects</tspan>
                   </text>
                 );
               }}
             />
           </Pie>
         </PieChart>
-        
-        <div className='flex flex-col gap-8 py-10'>
 
-
-         <div className='flex items-center gap-2'>
-          <div className='h-2.5 w-2.5 bg-emerald-500 shrink-0'></div>
-           <p className='font-semibold text-xs leading-none -translate-y-px'>Completed</p>
-         </div>
-         
-
-          <div className='flex items-center gap-2'>
-          <div className='h-2.5 w-2.5 bg-blue-500 shrink-0'></div>
-           <p className='font-semibold text-xs leading-none -translate-y-px'>In Progress</p>
-         </div>
-
-         <div className='flex items-center gap-2'>
-          <div className='h-2.5 w-2.5 bg-amber-500 shrink-0'></div>
-           <p className='font-semibold text-xs leading-none -translate-y-px'>Proposal</p>
-         </div>
-
-         <div className='flex items-center gap-2'>
-          <div className='h-2.5 w-2.5 bg-purple-500 shrink-0'></div>
-           <p className='font-semibold text-xs leading-none -translate-y-px'>On Hold</p>
-         </div>
-
+        {/* RIGHT — Legend */}
+        <div className="flex flex-col gap-3 flex-1">
+          {data.map((entry) => (
+            <div key={entry.name} className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="h-2.5 w-2.5 rounded-sm shrink-0" style={{ backgroundColor: entry.color }}></div>
+                <p className="text-xs text-gray-600">{entry.name}</p>
+              </div>
+              <div className="flex items-center gap-1 text-xs">
+                <span className="font-semibold text-gray-800">{entry.value}</span>
+                <span className="text-gray-400">({Math.round(entry.value / total * 100)}%)</span>
+              </div>
+            </div>
+          ))}
         </div>
-         
-         <div className='flex flex-col gap-4 py-10'>
-          
-          <div className='flex items-center gap-2'>
-            <p>10</p>
-            <p>(41.7%)</p>
-          </div>
-          
-          <div className='flex items-center gap-2'>
-            <p>8</p>
-            <p>(33.3%)</p>
-          </div>
-          
-          <div className='flex items-center gap-2'>
-            <p>4</p>
-            <p>(16.7%)</p>
-          </div>
-          
-          <div className='flex items-center gap-2'>
-            <p>2</p>
-            <p>(8.3%)</p>
-          </div>
-          
-         </div>
-
 
       </div>
-
-
     </div>
-  
   );
 }

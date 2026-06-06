@@ -21,9 +21,9 @@ return(
   </div>
    <button
    onClick={() => setIsExpanded (!isExpanded)}
-   className="text-blue-500 test-xs text-left mt-1 font-medium hover:text-blue-700"
+   className="text-amber-500 test-xs text-left mt-1 font-semibold hover:underline cursor-pointer"
    >
-    {isExpanded ? 'Show Less' : 'View Details'}
+    {isExpanded ? 'Show Less' : 'View Details →'}
 
    </button>
  </div>
