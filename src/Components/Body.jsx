@@ -26,7 +26,7 @@ function Body() {
     };
   return ( 
 <>
-  <div className="w-full px-4 pb-8">
+  <div className="w-full px-4 pb-8 overflow-x-hidden">
     <div className="flex items-center p-4 justify-between">
       <div className="">
       <div className="flex items-center">
@@ -49,22 +49,22 @@ function Body() {
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-4 ">
       <div>
         <Card  className="w-full border border-gray-100 shadow-sm">
-          <CardHeader>
+          <CardHeader className="pb-1 pt-3 px-3">
             <div className="flex items-center gap-2 ">
               <span className="bg-[#080838]/20 rounded-full p-2 ">
               <GoProjectRoadmap className="text-blue-500  " />
               </span>
-            <CardTitle> Total Projects</CardTitle>
+            <CardTitle className="text-xs font-medium text-gray-500 leading-tight"> Total Projects</CardTitle>
             </div>
           </CardHeader>
 
           
-          <CardContent>
+          <CardContent className="px-3 pb-3">
           
               
            <div className="flex flex-col items-start pl-8 ">
 
-              <p className="text-2xl font-bold leading-none">24</p>
+              <p className="text-xl font-bold leading-none">24</p>
 
              <div className="flex items-center leading-none">
               <IoMdArrowDropup className="text-2xl text-green-500" /> 
@@ -80,22 +80,22 @@ function Body() {
 
         <div>
         <Card className="w-full border border-gray-100 shadow-sm">
-          <CardHeader>
+          <CardHeader className="pb-1 pt-3 px-3">
             <div className="flex items-center gap-2 ">
               <span className="bg-green-50 rounded-full p-2 ">
               <MdPhotoSizeSelectLarge className="text-green-400 " />
               </span>
-            <CardTitle> Total System Size</CardTitle>
+            <CardTitle className="text-xs font-medium text-gray-500 leading-tight">System Size</CardTitle>
             </div>
           </CardHeader>
 
           
-          <CardContent>
+          <CardContent className="px-3 pb-3">
           
               
            <div className="flex flex-col items-start pl-8 ">
 
-              <p className="text-2xl font-bold leading-none">128.4 <span className="text-xs ">kw</span></p>
+              <p className="text-xl font-bold leading-none">128.4 <span className="text-xs ">kw</span></p>
 
              <div className="flex items-center leading-none ">
               <IoMdArrowDropup className="text-2xl text-green-500" /> 
@@ -111,22 +111,22 @@ function Body() {
 
       <div>
         <Card  className="w-full border border-gray-100 shadow-sm">
-          <CardHeader>
+          <CardHeader className="pb-1 pt-3 px-3">
             <div className="flex items-center gap-2 ">
               <span className="bg-[#a67c00]/20 rounded-full p-2 ">
               <MdOutlineSavings className="text-[#a67c00]  " />
               </span>
-            <CardTitle> Monthly Savings</CardTitle>
+            <CardTitle className="text-xs font-medium text-gray-500 leading-tight"> Monthly Savings</CardTitle>
             </div>
           </CardHeader>
 
           
-          <CardContent>
+          <CardContent className="px-3 pb-3">
           
               
            <div className="flex flex-col items-start pl-8 ">
 
-              <p className="text-2xl font-bold leading-none ">₦1,245,000</p>
+              <p className="text-xl font-bold leading-none ">₦1,245,000</p>
 
              <div className="flex items-center leading-none ">
               <IoMdArrowDropup className="text-2xl text-green-500" /> 
@@ -142,22 +142,22 @@ function Body() {
 
       <div>
         <Card  className="w-full border border-gray-100 shadow-sm">
-          <CardHeader>
+          <CardHeader className="pb-1 pt-3 px-3">
             <div className="flex items-center gap-2 ">
               <span className="bg-green-50 rounded-full p-2 ">
               <LuLeaf className="text-green-500 " />
               </span>
-            <CardTitle> CO₂ Reduction</CardTitle>
+            <CardTitle className="text-xs font-medium text-gray-500 leading-tight"> CO₂ Reduction</CardTitle>
             </div>
           </CardHeader>
 
           
-          <CardContent>
+          <CardContent className="px-3 pb-3">
           
               
            <div className="flex flex-col items-start pl-8 ">
 
-              <p className="text-2xl font-bold leading-none">12.8 Ton</p>
+              <p className="text-xl font-bold leading-none">12.8 Ton</p>
 
              <div className="flex items-center leading-none">
               <IoMdArrowDropup className="text-2xl text-green-500" /> 
@@ -173,22 +173,22 @@ function Body() {
 
       <div>
         <Card  className="w-full border border-gray-100 shadow-sm">
-          <CardHeader>
+          <CardHeader className="pb-1 pt-3 px-3">
             <div className="flex items-center gap-2 ">
               <span className="bg-[#080838]/30 rounded-full p-2 ">
               <LuClock2 className="text-blue-700  " />
               </span>
-            <CardTitle> Avg. Payback Period</CardTitle>
+            <CardTitle className="text-xs font-medium text-gray-500 leading-tight">Payback Period</CardTitle>
             </div>
           </CardHeader>
 
           
-          <CardContent>
+          <CardContent className="px-3 pb-3">
           
               
            <div className="flex flex-col items-start pl-8 ">
 
-              <p className="text-2xl font-bold leading-none">3.6 Years</p>
+              <p className="text-xl font-bold leading-none">3.6 Years</p>
 
              <div className="flex items-center leading-none ">
               <MdArrowDropDown className="text-2xl text-red-500" /> 
