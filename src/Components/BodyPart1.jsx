@@ -27,7 +27,7 @@ function BodyPart1() {
 
     <div className=" flex flex-col xl:flex-row w-full gap-4">
        
-       <div clasName="flex flex-col gap-4 flex-1 min-w-0 max-w-[65%]">
+       <div className="flex flex-col gap-4 flex-1 min-w-0 max-w-[65%]">
         <SystemOverview/>
         <RecentProjectsTable/>
         

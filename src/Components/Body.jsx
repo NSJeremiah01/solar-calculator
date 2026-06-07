@@ -26,7 +26,7 @@ function Body() {
     };
   return ( 
 <>
-  <div className="w-full px-4 pb-8 overflow-x-hidden">
+  <div className="w-full px-4  overflow-x-hidden">
     <div className="flex items-center p-4 justify-between">
       <div className="">
       <div className="flex items-center">
@@ -46,161 +46,94 @@ function Body() {
     </div>
 
   </div>
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-4 ">
-      <div>
-        <Card  className="w-full border border-gray-100 shadow-sm">
-          <CardHeader className="pb-1 pt-3 px-3">
-            <div className="flex items-center gap-2 ">
-              <span className="bg-[#080838]/20 rounded-full p-2 ">
-              <GoProjectRoadmap className="text-blue-500  " />
-              </span>
-            <CardTitle className="text-xs font-medium text-gray-500 leading-tight"> Total Projects</CardTitle>
-            </div>
-          </CardHeader>
-
-          
-          <CardContent className="px-3 pb-3">
-          
-              
-           <div className="flex flex-col items-start pl-8 ">
-
-              <p className="text-xl font-bold leading-none">24</p>
-
-             <div className="flex items-center leading-none">
-              <IoMdArrowDropup className="text-2xl text-green-500" /> 
-              <span className="text-green-500">12%</span>
-              <span className="text-black pl-2 whitespace-nowrap">from last month</span>
-              </div>
-            </div>
-            
-          </CardContent>
-          
-        </Card>
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-2 items-stretch ">
+      <div className="flex items-start gap-3 py-6 px-3 border  border-gray-100 rounded-lg shadow-sm bg-white">
+        {/* Icon */}
+        <span className="bg-[#a855f7]/20 rounded-full mt-1 p-2 shrink-0">
+          <GoProjectRoadmap className="text-[#a855f7] text-xs" />
+        </span>
+        {/* Text stack */}
+        <div className="min-w-0 gap-2 flex flex-col">
+          <p className="text-xs text-gray-500">Total Projects</p>
+          <p className="text-xl font-bold">24</p>
+          <div className="flex items-center gap-0.5">
+            <IoMdArrowDropup className="text-green-500 text-sm" />
+            <span className="text-green-500 text-xs">12%</span>
+            <span className="text-gray-400 text-xs whitespace-nowrap">from last month</span>
+          </div>
+        </div>
       </div>
 
-        <div>
-        <Card className="w-full border border-gray-100 shadow-sm">
-          <CardHeader className="pb-1 pt-3 px-3">
-            <div className="flex items-center gap-2 ">
-              <span className="bg-green-50 rounded-full p-2 ">
-              <MdPhotoSizeSelectLarge className="text-green-400 " />
-              </span>
-            <CardTitle className="text-xs font-medium text-gray-500 leading-tight">System Size</CardTitle>
-            </div>
-          </CardHeader>
-
-          
-          <CardContent className="px-3 pb-3">
-          
-              
-           <div className="flex flex-col items-start pl-8 ">
-
-              <p className="text-xl font-bold leading-none">128.4 <span className="text-xs ">kw</span></p>
-
-             <div className="flex items-center leading-none ">
-              <IoMdArrowDropup className="text-2xl text-green-500" /> 
-              <span className="text-green-500">18%</span>
-              <span className="text-black pl-2 whitespace-nowrap">from last month</span>
-              </div>
-            </div>
-            
-          </CardContent>
-          
-        </Card>
+        <div className="flex items-start  gap-3 py-6 px-3 border bg-white border-gray-100 rounded-lg shadow-sm">
+        {/* Icon */}
+        <span className="bg-green-100 rounded-full mt-1 p-2 shrink-0">
+          <MdPhotoSizeSelectLarge className="text-green-600 text-xs" />
+        </span>
+        {/* Text stack */}
+        <div className="min-w-0 gap-2 flex flex-col">
+          <p className="text-xs text-gray-500">System Size</p>
+          <p className="text-xl font-bold">128.4 <span className="text-xs ">kw</span></p>
+          <div className="flex items-center gap-0.5">
+            <IoMdArrowDropup className="text-green-500 text-sm" />
+            <span className="text-green-500 text-xs">18%</span>
+            <span className="text-gray-400 text-xs whitespace-nowrap">from last month</span>
+          </div>
+        </div>
       </div>
 
-      <div>
-        <Card  className="w-full border border-gray-100 shadow-sm">
-          <CardHeader className="pb-1 pt-3 px-3">
-            <div className="flex items-center gap-2 ">
-              <span className="bg-[#a67c00]/20 rounded-full p-2 ">
-              <MdOutlineSavings className="text-[#a67c00]  " />
-              </span>
-            <CardTitle className="text-xs font-medium text-gray-500 leading-tight"> Monthly Savings</CardTitle>
-            </div>
-          </CardHeader>
 
-          
-          <CardContent className="px-3 pb-3">
-          
-              
-           <div className="flex flex-col items-start pl-8 ">
-
-              <p className="text-xl font-bold leading-none ">₦1,245,000</p>
-
-             <div className="flex items-center leading-none ">
-              <IoMdArrowDropup className="text-2xl text-green-500" /> 
-              <span className="text-green-500">15%</span>
-              <span className="text-black pl-2 whitespace-nowrap">from last month</span>
-              </div>
-            </div>
-            
-          </CardContent>
-          
-        </Card>
+     <div className="flex items-start  gap-3 py-6 px-3 border bg-white border-gray-100 rounded-lg shadow-sm">
+        {/* Icon */}
+        <span className="bg-[#a67c00]/20 rounded-full mt-1 p-2 shrink-0">
+          <MdOutlineSavings className="text-[#a67c00] text-xs" />
+        </span>
+        {/* Text stack */}
+        <div className="min-w-0 gap-2 flex flex-col">
+          <p className="text-xs text-gray-500">Monthly Savings</p>
+          <p className="text-xl font-bold">₦1,245,000</p>
+          <div className="flex items-center gap-0.5">
+            <IoMdArrowDropup className="text-green-500 text-sm" />
+            <span className="text-green-500 text-xs">15%</span>
+            <span className="text-gray-400 text-xs whitespace-nowrap">from last month</span>
+          </div>
+        </div>
       </div>
 
-      <div>
-        <Card  className="w-full border border-gray-100 shadow-sm">
-          <CardHeader className="pb-1 pt-3 px-3">
-            <div className="flex items-center gap-2 ">
-              <span className="bg-green-50 rounded-full p-2 ">
-              <LuLeaf className="text-green-500 " />
-              </span>
-            <CardTitle className="text-xs font-medium text-gray-500 leading-tight"> CO₂ Reduction</CardTitle>
-            </div>
-          </CardHeader>
-
-          
-          <CardContent className="px-3 pb-3">
-          
-              
-           <div className="flex flex-col items-start pl-8 ">
-
-              <p className="text-xl font-bold leading-none">12.8 Ton</p>
-
-             <div className="flex items-center leading-none">
-              <IoMdArrowDropup className="text-2xl text-green-500" /> 
-              <span className="text-green-500">10%</span>
-              <span className="text-black pl-2 whitespace-nowrap">from last month</span>
-              </div>
-            </div>
-            
-          </CardContent>
-          
-        </Card>
+      <div className="flex items-start  gap-3 py-6 px-3 border bg-white border-gray-100 rounded-lg shadow-sm">
+        {/* Icon */}
+        <span className="bg-green-50 rounded-full mt-1 p-2 shrink-0">
+          <LuLeaf className="text-green-500 text-xs" />
+        </span>
+        {/* Text stack */}
+        <div className="min-w-0 gap-2 flex flex-col">
+          <p className="text-xs text-gray-500">CO₂ Reduction</p>
+          <p className="text-xl font-bold">12.8 Ton</p>
+          <div className="flex items-center gap-0.5">
+            <IoMdArrowDropup className="text-green-500 text-sm" />
+            <span className="text-green-500 text-xs">15%</span>
+            <span className="text-gray-400 text-xs whitespace-nowrap">from last month</span>
+          </div>
+        </div>
       </div>
 
-      <div>
-        <Card  className="w-full border border-gray-100 shadow-sm">
-          <CardHeader className="pb-1 pt-3 px-3">
-            <div className="flex items-center gap-2 ">
-              <span className="bg-[#080838]/30 rounded-full p-2 ">
-              <LuClock2 className="text-blue-700  " />
-              </span>
-            <CardTitle className="text-xs font-medium text-gray-500 leading-tight">Payback Period</CardTitle>
-            </div>
-          </CardHeader>
-
-          
-          <CardContent className="px-3 pb-3">
-          
-              
-           <div className="flex flex-col items-start pl-8 ">
-
-              <p className="text-xl font-bold leading-none">3.6 Years</p>
-
-             <div className="flex items-center leading-none ">
-              <MdArrowDropDown className="text-2xl text-red-500" /> 
-              <span className="text-red-500">0.3</span>
-              <span className="text-black pl-2 whitespace-nowrap">from last month</span>
-              </div>
-            </div>
-            
-          </CardContent>
-          
-        </Card>
+      <div className="flex items-start  gap-3 py-6 px-3 border bg-white border-gray-100 rounded-lg shadow-sm">
+        {/* Icon */}
+        <span className="bg-[#080838]/30 rounded-full mt-1 p-2 shrink-0">
+          <LuClock2 className="text-blue-700 text-xs" />
+        </span>
+        {/* Text stack */}
+        <div className="min-w-0 gap-2 flex flex-col">
+          <p className="text-xs text-gray-500">Payback Period</p>
+          <p className="text-xl font-bold">3.6 Years</p>
+          <div className="flex items-center gap-0.5">
+            <MdArrowDropDown className="text-red-500 text-sm" />
+            <span className="text-red-500 text-xs">0.3</span>
+            <span className="text-gray-400 text-xs whitespace-nowrap">from last month</span>
+          </div>
+        </div>
       </div>
+
+
 
 
 
