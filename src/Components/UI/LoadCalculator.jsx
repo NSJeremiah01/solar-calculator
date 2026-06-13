@@ -4,10 +4,26 @@ import { useState } from "react";
 const defaultAppliances = [
   { id: 1, name: "LED Bulb",        watts: 10,   qty: 6,  hours: 6  },
   { id: 2, name: "Ceiling Fan",     watts: 75,   qty: 2,  hours: 8  },
-  { id: 3, name: "Refrigerator",    watts: 150,  qty: 1,  hours: 24 },
+  { id: 3, name: "Refrigerator",    watts: 150,  qty: 1,  hours: 8 },
   { id: 4, name: "TV (32 inch)",    watts: 60,   qty: 1,  hours: 6  },
   { id: 5, name: "Phone Charger",   watts: 10,   qty: 4,  hours: 3  },
+  
 ];
+
+   
+          // ── COMPONENT DATABASE ───────────────────────────────────
+    const panelDatabase = [
+      { brand: "Jinko Solar",      model: "Tiger Neo 400W",    watts: 400, price: 95000  },
+      { brand: "Jinko Solar",      model: "Tiger Neo 550W",    watts: 550, price: 125000 },
+      { brand: "Canadian Solar",   model: "HiKu6 400W",        watts: 400, price: 90000  },
+      { brand: "Canadian Solar",   model: "HiKu6 550W",        watts: 550, price: 118000 },
+      { brand: "Astronergy",       model: "CHSM400W Mono",     watts: 400, price: 85000  },
+      { brand: "Astronergy",       model: "CHSM550W Mono",     watts: 550, price: 110000 },
+      { brand: "BOVIET",           model: "BVM6610M 400W",     watts: 400, price: 82000  },
+      { brand: "BOVIET",           model: "BVM6610M 550W",     watts: 550, price: 105000 },
+      { brand: "Solarpro",         model: "300W Poly",         watts: 300, price: 65000  },
+      { brand: "Solarpro",         model: "200W Poly",         watts: 200, price: 45000  },
+    ];
 
 export default function LoadCalculator() {
   const [appliances, setAppliances] = useState(defaultAppliances);
@@ -24,6 +40,27 @@ export default function LoadCalculator() {
     ph: 5.5, ibadan: 5.7, enugu: 5.6, custom: 0
   };
 
+
+
+          const [bom, setBom] = useState({
+      // Panels
+      panel: {
+        search: "",
+        brand: "",
+        model: "",
+        watts: 400,
+        qty: 0,          // will be set from panelCount
+        unitPrice: 0,
+        isCustom: false,
+      },
+      // we'll add batteries, inverter etc. next
+    });
+
+  const updateBom = (field, value) => {
+    setBom((prev) => ({ ...prev, [field]: Number(value) }));
+  };
+
+
   const [config, setConfig] = useState({
     location: "lagos",
     peakSunHours: 5.8,
@@ -31,6 +68,7 @@ export default function LoadCalculator() {
     panelWatts: 400,
     autonomyDays: 2,
     batteryType: "lithium",
+    dod: 80,
     efficiency: 85,
     safetyMargin: 20,
   });
@@ -45,6 +83,48 @@ export default function LoadCalculator() {
       return updated;
     });
   };
+
+
+       // Panel search
+const [panelResults, setPanelResults] = useState([]);
+const [showPanelResults, setShowPanelResults] = useState(false);
+
+const searchPanels = (query) => {
+  setBom((prev) => ({
+    ...prev,
+    panel: { ...prev.panel, search: query, isCustom: true }
+  }));
+  if (query.length < 2) {
+    setPanelResults([]);
+    setShowPanelResults(false);
+    return;
+  }
+  const results = panelDatabase.filter(
+    (p) =>
+      p.brand.toLowerCase().includes(query.toLowerCase()) ||
+      p.model.toLowerCase().includes(query.toLowerCase()) ||
+      p.watts.toString().includes(query)
+  );
+  setPanelResults(results);
+  setShowPanelResults(true);
+};
+
+const selectPanel = (panel) => {
+  setBom((prev) => ({
+    ...prev,
+    panel: {
+      ...prev.panel,
+      search:    `${panel.brand} ${panel.model}`,
+      brand:     panel.brand,
+      model:     panel.model,
+      watts:     panel.watts,
+      unitPrice: panel.price,
+      isCustom:  false,
+    },
+  }));
+  setPanelResults([]);
+  setShowPanelResults(false);
+};
 
   // Remove an appliance row by id
   const removeAppliance = (id) => {
@@ -63,6 +143,110 @@ export default function LoadCalculator() {
 
   // Total daily load
   const totalDailyWh = appliances.reduce((sum, a) => sum + getDailyWh(a), 0);
+       
+      // ── SIZING CALCULATIONS ──────────────────────────────────
+
+    // Adjusted daily load accounting for system efficiency and safety margin
+    const adjustedLoad = totalDailyWh / (config.efficiency / 100) * (1 + config.safetyMargin / 100);
+
+    // Peak load (watts) - max simultaneous load
+    const peakLoad = appliances.reduce((sum, a) => sum + a.watts * a.qty, 0);
+
+      // ── SOLAR PANELS ─────────────────────────────────────────
+  const panelLoad = totalDailyWh * (1 + config.safetyMargin / 100);
+  const rawPanelCount = panelLoad / (config.peakSunHours * config.panelWatts);
+  const panelCount = Math.ceil(rawPanelCount);
+  const totalArrayWatts = panelCount * config.panelWatts;
+  const dailyGeneration = Math.round(totalArrayWatts * config.peakSunHours);
+
+  // ── PANEL COMBINATIONS ───────────────────────────────────
+  // Find all combinations that produce the same or slightly more total wattage
+  const getPanelCombinations = (targetWatts) => {
+    const standardSizes = [100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700];
+    const combos = [];
+
+    standardSizes.forEach((panelW) => {
+      const count = Math.ceil(targetWatts / panelW);
+      const totalW = count * panelW;
+      // only include if within 20% above target
+      if (totalW >= targetWatts && totalW <= targetWatts * 1.2) {
+        combos.push({ count, panelW, totalW });
+      }
+    });
+
+    // sort by fewest panels first
+    return combos.sort((a, b) => a.count - b.count).slice(0, 5);
+  };
+
+  const panelCombinations = getPanelCombinations(totalArrayWatts);
+
+    // ── BATTERY BANK ─────────────────────────────────────────
+    const batteryAh = Math.ceil(
+      (totalDailyWh * config.autonomyDays) / (config.systemVoltage * (config.dod / 100))
+    );
+    const batteryKwh = ((batteryAh * config.systemVoltage) / 1000).toFixed(2);
+
+    // ── CHARGE CONTROLLER ────────────────────────────────────
+    const chargeControllerAmps = Math.ceil((totalArrayWatts / config.systemVoltage) * 1.25);
+
+    // ── INVERTER ─────────────────────────────────────────────
+    const inverterKw = ((peakLoad * 1.25) / 1000).toFixed(2);
+    const inverterSize = Math.ceil(peakLoad * 1.25 / 500) * 500; // rounds to nearest 500W
+
+    // ── LOAD FACTOR ──────────────────────────────────────────
+    const loadFactor = peakLoad > 0 ? ((totalDailyWh / 24) / peakLoad * 100).toFixed(1) : 0;
+
+    // ── RUNTIME ON BATTERY ───────────────────────────────────
+    const runtimeHours = peakLoad > 0
+      ? ((batteryAh * config.systemVoltage * (config.dod / 100)) / peakLoad).toFixed(1)
+      : 0;
+
+    // ── CABLE SIZING (mm²) ───────────────────────────────────
+    // Based on current in each section
+    const pvCurrent = totalArrayWatts / config.systemVoltage;
+    const pvCableSize = pvCurrent <= 10 ? 4 : pvCurrent <= 20 ? 6 : pvCurrent <= 30 ? 10 : 16;
+
+    const batteryCurrent = (inverterSize / config.systemVoltage);
+    const batteryCableSize = batteryCurrent <= 50 ? 16 : batteryCurrent <= 100 ? 25 : batteryCurrent <= 150 ? 35 : 50;
+
+    // ── BREAKER SIZING (A) ───────────────────────────────────
+    const pvBreaker = Math.ceil(pvCurrent * 1.25 / 5) * 5;        // DC breaker panels→controller
+    const batteryBreaker = Math.ceil(batteryCurrent * 1.25 / 10) * 10; // DC breaker battery→inverter
+    const acBreaker = Math.ceil((inverterSize / 230) * 1.25 / 5) * 5;  // AC breaker output
+
+    // ── WARNINGS & CHECKS ────────────────────────────────────
+    const warnings = [];
+
+    // ERROR: inverter overload
+    if (peakLoad > inverterSize) {
+      warnings.push({ type: "error", msg: `Peak load (${peakLoad}W) exceeds inverter size (${inverterSize}W). Increase inverter capacity.` });
+    }
+    // WARNING: inverter near capacity
+    else if (peakLoad > inverterSize * 0.8) {
+      warnings.push({ type: "warning", msg: `Peak load is above 80% of inverter capacity. Consider a larger inverter.` });
+    }
+    // WARNING: low load factor
+    if (loadFactor < 20) {
+      warnings.push({ type: "warning", msg: `Low load factor (${loadFactor}%). System may be oversized for actual usage.` });
+    }
+    // WARNING: very short runtime
+    if (runtimeHours < 3) {
+      warnings.push({ type: "warning", msg: `Battery runtime is only ${runtimeHours}h at peak load. Consider increasing battery bank.` });
+    }
+    // INFO: earthing reminder
+    if (totalArrayWatts > 3000) {
+      warnings.push({ type: "info", msg: `System exceeds 3kW. Proper earthing/grounding is required per electrical standards.` });
+    }
+    // INFO: SPD recommendation
+    if (totalArrayWatts > 1000) {
+      warnings.push({ type: "info", msg: `Surge Protection Device (SPD) is recommended for this system size.` });
+    }
+    // INFO: high autonomy cost note
+    if (config.autonomyDays >= 3) {
+      warnings.push({ type: "info", msg: `${config.autonomyDays} days autonomy requires a large battery bank. Verify budget vs. benefit.` });
+    }
+
+
 
   return (
     <div className="w-full px-4 pb-8">
@@ -201,65 +385,132 @@ export default function LoadCalculator() {
           )}
 
           {/* Battery Voltage */}
-          <div className="flex flex-col gap-1">
-            <label className="text-xs font-medium text-gray-500">System Voltage</label>
-            <select
-              className="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-amber-400"
-              value={config.systemVoltage}
-              onChange={(e) => updateConfig("systemVoltage", Number(e.target.value))}
-            >
-              <option value={12}>12V</option>
-              <option value={24}>24V</option>
-              <option value={48}>48V</option>
-            </select>
-          </div>
+      <div className="flex flex-col gap-1">
+          <label className="text-xs font-medium text-gray-500">System Voltage (V)</label>
+        <div className="flex gap-2">
+          <select
+            className="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-amber-400 flex-1"
+            value={[12, 24, 48].includes(config.systemVoltage) ? config.systemVoltage : "custom"}
+            onChange={(e) => {
+              if (e.target.value !== "custom") {
+                updateConfig("systemVoltage", Number(e.target.value));
+              }
+            }}
+              >
+            <option value={12}>12V</option>
+            <option value={24}>24V</option>
+            <option value={48}>48V</option>
+            <option value="custom">Custom</option>
+          </select>
+          <input
+            type="number"
+            className="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-amber-400 w-20"
+            value={config.systemVoltage}
+            onChange={(e) => updateConfig("systemVoltage", Number(e.target.value))}
+            placeholder="V"
+          />
+        </div>
+      </div>
 
           {/* Panel Wattage */}
-          <div className="flex flex-col gap-1">
-            <label className="text-xs font-medium text-gray-500">Panel Wattage (W)</label>
-            <select
-              className="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-amber-400"
-              value={config.panelWatts}
-              onChange={(e) => updateConfig("panelWatts", Number(e.target.value))}
-            >
-              <option value={200}>200W</option>
-              <option value={250}>250W</option>
-              <option value={300}>300W</option>
-              <option value={400}>400W</option>
-              <option value={550}>550W</option>
-              <option value={600}>600W</option>
-            </select>
-          </div>
+      <div className="flex flex-col gap-1">
+          <label className="text-xs font-medium text-gray-500">Panel Wattage (W)</label>
+        <div className="flex gap-2">
+          <select
+            className="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-amber-400 flex-1"
+            value={[200, 250, 300, 400, 550, 600].includes(config.panelWatts) ? config.panelWatts : "custom"}
+            onChange={(e) => {
+              if (e.target.value !== "custom") {
+                updateConfig("panelWatts", Number(e.target.value));
+              }
+            }}
+          >
+            <option value={200}>200W</option>
+            <option value={250}>250W</option>
+            <option value={300}>300W</option>
+            <option value={400}>400W</option>
+            <option value={550}>550W</option>
+            <option value={600}>600W</option>
+            <option value="custom">Custom</option>
+          </select>
+          <input
+            type="number"
+            className="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-amber-400 w-20"
+            value={config.panelWatts}
+            onChange={(e) => updateConfig("panelWatts", Number(e.target.value))}
+            placeholder="W"
+          />
+        </div>
+      </div>
 
           {/* Days of Autonomy */}
-          <div className="flex flex-col gap-1">
-            <label className="text-xs font-medium text-gray-500">Days of Autonomy</label>
-            <select
-              className="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-amber-400"
-              value={config.autonomyDays}
-              onChange={(e) => updateConfig("autonomyDays", Number(e.target.value))}
-            >
-              <option value={1}>1 day</option>
-              <option value={2}>2 days</option>
-              <option value={3}>3 days</option>
-              <option value={5}>5 days</option>
-            </select>
-          </div>
+    <div className="flex flex-col gap-1">
+      <label className="text-xs font-medium text-gray-500">
+        Days of Autonomy 
+       <span className="text-gray-400 font-normal ml-1">(cloudy day backup)</span>
+      </label>
+      <div className="flex gap-2">
+        <select
+          className="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-amber-400 flex-1"
+          value={[1, 2, 3, 5].includes(config.autonomyDays) ? config.autonomyDays : "custom"}
+          onChange={(e) => {
+            if (e.target.value !== "custom") {
+              updateConfig("autonomyDays", Number(e.target.value));
+            }
+          }}
+        >
+          <option value={1}>1 day</option>
+          <option value={2}>2 days</option>
+          <option value={3}>3 days</option>
+          <option value={5}>5 days</option>
+          <option value="custom">Custom</option>
+        </select>
+        <input
+          type="number"
+          min={1}
+          max={30}
+          className="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-amber-400 w-20"
+          value={config.autonomyDays}
+          onChange={(e) => updateConfig("autonomyDays", Number(e.target.value))}
+          placeholder="days"
+        />
+      </div>
+    </div>
 
           {/* Depth of Discharge */}
-          <div className="flex flex-col gap-1">
-            <label className="text-xs font-medium text-gray-500">Battery Type</label>
-            <select
-              className="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-amber-400"
-              value={config.batteryType}
-              onChange={(e) => updateConfig("batteryType", e.target.value)}
-            >
-              <option value="leadacid">Lead Acid (50% DoD)</option>
-              <option value="agm">AGM (60% DoD)</option>
-              <option value="gel">Gel (70% DoD)</option>
-              <option value="lithium">Lithium LiFePO4 (80% DoD)</option>
-            </select>
-          </div>
+    <div className="flex flex-col gap-1">
+         <label className="text-xs font-medium text-gray-500">Battery Type</label>
+      <select
+        className="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-amber-400"
+        value={config.batteryType}
+        onChange={(e) => {
+          updateConfig("batteryType", e.target.value);
+          const dodMap = {
+            leadacid: 50, agm: 60, gel: 70, lithium: 80
+          };
+          if (e.target.value !== "custom") {
+            updateConfig("dod", dodMap[e.target.value]);
+          }
+        }}
+      >
+        <option value="leadacid">Lead Acid</option>
+        <option value="agm">AGM</option>
+        <option value="gel">Gel</option>
+        <option value="lithium">Lithium LiFePO4</option>
+        <option value="custom">Custom</option>
+      </select>
+      <div className="flex items-center gap-2 mt-1">
+        <label className="text-xs text-gray-400">Depth of Discharge (%):</label>
+        <input
+          type="number"
+          min={10}
+          max={100}
+          className="text-sm bg-gray-50 border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:border-amber-400 w-16"
+          value={config.dod}
+          onChange={(e) => updateConfig("dod", Number(e.target.value))}
+        />
+      </div>
+    </div>
 
           {/* System Efficiency */}
           <div className="flex flex-col gap-1">
@@ -291,7 +542,317 @@ export default function LoadCalculator() {
 
         </div>
       </div>
+       {/* Results Section */}
+      {totalDailyWh > 0 && (
+        <div className="flex flex-col gap-4">
 
+          {/* Warnings */}
+          {warnings.length > 0 && (
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+              <h3 className="font-bold text-gray-800 mb-3">⚡ System Checks</h3>
+              <div className="flex flex-col gap-2">
+                {warnings.map((w, i) => (
+                  <div key={i} className={`flex items-start gap-2 px-3 py-2 rounded-lg text-sm ${
+                    w.type === "error"   ? "bg-red-50 text-red-700" :
+                    w.type === "warning" ? "bg-amber-50 text-amber-700" :
+                                          "bg-blue-50 text-blue-700"
+                  }`}>
+                    <span className="shrink-0 mt-0.5">
+                      {w.type === "error" ? "🔴" : w.type === "warning" ? "🟡" : "🟢"}
+                    </span>
+                    <p>{w.msg}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Sizing Results */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+            <h3 className="font-bold text-gray-800 mb-4">System Sizing Results</h3>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+
+              {[
+                { label: "Daily Load",         value: `${totalDailyWh.toLocaleString()} Wh`,    sub: `${(totalDailyWh/1000).toFixed(2)} kWh/day`,  color: "bg-blue-50 text-blue-700"   },
+                { label: "Adjusted Load",       value: `${Math.round(adjustedLoad).toLocaleString()} Wh`, sub: "with efficiency + margin",           color: "bg-purple-50 text-purple-700"},
+                { label: "Peak Load",           value: `${peakLoad.toLocaleString()} W`,         sub: "max simultaneous",                            color: "bg-amber-50 text-amber-700" },
+                { label: "Solar Panels", value: `${panelCount} × ${config.panelWatts}W`, sub: `${totalArrayWatts}W array → ~${dailyGeneration}Wh/day`, color: "bg-green-50 text-green-700"},
+                { label: "Battery Bank", value: `${batteryAh} Ah`, sub: `${batteryKwh} kWh @ ${config.systemVoltage}V | ${config.autonomyDays}d autonomy, ${config.dod}% DoD`, color: "bg-amber-50 text-amber-700"},
+                { label: "Charge Controller",   value: `${chargeControllerAmps} A`,              sub: "MPPT recommended",                            color: "bg-blue-50 text-blue-700"   },
+                { label: "Inverter Size",       value: `${inverterKw} kW`,                       sub: `${inverterSize}W minimum`,                    color: "bg-green-50 text-green-700" },
+                { label: "Load Factor",         value: `${loadFactor}%`,                         sub: "avg ÷ peak load",                             color: "bg-purple-50 text-purple-700"},
+                { label: "Battery Runtime",     value: `${runtimeHours} hrs`,                    sub: "at peak load",                                color: "bg-blue-50 text-blue-700"   },
+              ].map(({ label, value, sub, color }) => (
+                <div key={label} className={`${color} rounded-xl p-3`}>
+                  <p className="text-xs font-medium opacity-70 mb-1">{label}</p>
+                  <p className="text-lg font-bold leading-tight">{value}</p>
+                  <p className="text-xs opacity-60 mt-0.5">{sub}</p>
+                </div>
+              ))}
+
+            </div>
+          </div>
+
+              {/* Panel Combinations */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+            <div className="flex items-start justify-between mb-1">
+              <h3 className="font-bold text-gray-800">Recommended Panel Configurations</h3>
+            </div>
+            <p className="text-xs text-gray-400 mb-4">
+              All combinations below meet your {totalArrayWatts}W array requirement. 
+              Choose based on available panel sizes in your market.
+            </p>
+
+            <div className="flex flex-col gap-2">
+              {panelCombinations.map(({ count, panelW, totalW }, i) => (
+                <div
+                  key={i}
+                  className={`flex items-center justify-between px-4 py-3 rounded-xl border transition-colors ${
+                    panelW === config.panelWatts
+                      ? "border-amber-400 bg-amber-50"
+                      : "border-gray-100 bg-gray-50 hover:border-amber-200"
+                  }`}
+                >
+                  {/* Left - combination */}
+                  <div className="flex items-center gap-3">
+                    <span className={`text-xs font-bold px-2 py-0.5 rounded-md ${
+                      i === 0 ? "bg-green-100 text-green-700" : "bg-gray-200 text-gray-600"
+                    }`}>
+                      {i === 0 ? "Fewest Panels" : `Option ${i + 1}`}
+                    </span>
+                    <p className="text-sm font-bold text-gray-800">
+                      {count} × {panelW}W
+                    </p>
+                  </div>
+
+                  {/* Middle - total watts */}
+                  <p className="text-sm font-semibold text-gray-600">
+                    = {totalW.toLocaleString()}W array
+                  </p>
+
+                  {/* Right - daily generation */}
+                  <div className="text-right">
+                    <p className="text-xs text-gray-500">~{Math.round(totalW * config.peakSunHours).toLocaleString()} Wh/day</p>
+                    <p className="text-xs text-gray-400">{config.peakSunHours}h sun</p>
+                  </div>
+
+                  {/* Selected indicator */}
+                  {panelW === config.panelWatts && (
+                    <span className="text-xs text-amber-600 font-semibold ml-2">← Your selection</span>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Cloudy day note */}
+            <div className="mt-4 px-4 py-3 bg-blue-50 rounded-xl">
+              <p className="text-xs text-blue-700 font-medium">☁️ Cloudy Day Coverage</p>
+              <p className="text-xs text-blue-600 mt-1">
+                Your battery bank of <strong>{batteryAh}Ah ({batteryKwh}kWh)</strong> provides 
+                <strong> {config.autonomyDays} day{config.autonomyDays > 1 ? "s" : ""}</strong> of backup 
+                without any solar generation. Increase <em>Days of Autonomy</em> in configuration for longer cloudy periods.
+              </p>
+            </div>
+          </div>
+
+
+                {/* ── BILL OF MATERIALS ─────────────────────────── */}
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <h3 className="font-bold text-xl text-gray-900">Bill of Materials</h3>
+            <span className="text-xs text-gray-400 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100">
+              All prices in ₦
+            </span>
+          </div>
+
+          {/* PANEL CARD */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="bg-amber-50 p-2 rounded-lg">☀️</span>
+              <div>
+                <h4 className="font-bold text-gray-800">Solar Panels</h4>
+                <p className="text-xs text-gray-400">
+                  System requires {panelCount} × {config.panelWatts}W = {totalArrayWatts}W array
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+              {/* Search */}
+              <div className="flex flex-col gap-1 relative">
+                <label className="text-xs font-medium text-gray-500">Search Panel</label>
+                <input
+                  type="text"
+                  className="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-amber-400"
+                  placeholder="e.g. Jinko 400W or Canadian Solar..."
+                  value={bom.panel.search}
+                  onChange={(e) => searchPanels(e.target.value)}
+                />
+                {/* Dropdown results */}
+                {showPanelResults && panelResults.length > 0 && (
+                  <div className="absolute top-16 left-0 right-0 bg-white border border-gray-200 rounded-xl shadow-lg z-10 max-h-48 overflow-y-auto">
+                    {panelResults.map((p, i) => (
+                      <div
+                        key={i}
+                        onClick={() => selectPanel(p)}
+                        className="flex items-center justify-between px-4 py-2.5 hover:bg-amber-50 cursor-pointer border-b border-gray-50 last:border-0"
+                      >
+                        <div>
+                          <p className="text-sm font-semibold text-gray-800">{p.brand}</p>
+                          <p className="text-xs text-gray-400">{p.model}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-xs font-bold text-amber-600">{p.watts}W</p>
+                          <p className="text-xs text-gray-400">₦{p.price.toLocaleString()}</p>
+                        </div>
+                      </div>
+                    ))}
+                    {/* Custom option always at bottom */}
+                    <div
+                      onClick={() => {
+                        setBom((prev) => ({ ...prev, panel: { ...prev.panel, isCustom: true } }));
+                        setShowPanelResults(false);
+                      }}
+                      className="flex items-center gap-2 px-4 py-2.5 hover:bg-gray-50 cursor-pointer text-blue-600"
+                    >
+                      <span className="text-xs">+ Enter custom panel not in database</span>
+                    </div>
+                  </div>
+                )}
+                {/* No results */}
+                {showPanelResults && panelResults.length === 0 && bom.panel.search.length >= 2 && (
+                  <div className="absolute top-16 left-0 right-0 bg-white border border-gray-200 rounded-xl shadow-lg z-10 p-3">
+                    <p className="text-xs text-gray-400 mb-2">No panels found in database.</p>
+                    <div
+                      onClick={() => {
+                        setBom((prev) => ({ ...prev, panel: { ...prev.panel, isCustom: true } }));
+                        setShowPanelResults(false);
+                      }}
+                      className="text-xs text-blue-600 cursor-pointer hover:underline"
+                    >
+                      + Add custom panel manually
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Brand & Model - shows when custom */}
+              {bom.panel.isCustom && (
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-medium text-gray-500">Brand & Model</label>
+                  <input
+                    type="text"
+                    className="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-amber-400"
+                    placeholder="e.g. Solarpro 400W Mono"
+                    value={bom.panel.model}
+                    onChange={(e) =>
+                      setBom((prev) => ({ ...prev, panel: { ...prev.panel, model: e.target.value } }))
+                    }
+                  />
+                </div>
+              )}
+
+              {/* Wattage */}
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-medium text-gray-500">Panel Wattage (W)</label>
+                <input
+                  type="number"
+                  className="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-amber-400"
+                  value={bom.panel.watts}
+                  onChange={(e) =>
+                    setBom((prev) => ({ ...prev, panel: { ...prev.panel, watts: Number(e.target.value) } }))
+                  }
+                />
+              </div>
+
+              {/* Quantity */}
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-medium text-gray-500">
+                  Quantity
+                  <span className="text-gray-400 font-normal ml-1">(auto from sizing)</span>
+                </label>
+                <input
+                  type="number"
+                  className="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-amber-400"
+                  value={bom.panel.qty || panelCount}
+                  onChange={(e) =>
+                    setBom((prev) => ({ ...prev, panel: { ...prev.panel, qty: Number(e.target.value) } }))
+                  }
+                />
+              </div>
+
+              {/* Unit Price */}
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-medium text-gray-500">Unit Price (₦)</label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">₦</span>
+                  <input
+                    type="number"
+                    className="text-sm bg-gray-50 border border-gray-200 rounded-lg pl-6 pr-3 py-2 focus:outline-none focus:border-amber-400 w-full"
+                    placeholder="0"
+                    value={bom.panel.unitPrice || ""}
+                    onChange={(e) =>
+                      setBom((prev) => ({ ...prev, panel: { ...prev.panel, unitPrice: Number(e.target.value) } }))
+                    }
+                  />
+                </div>
+              </div>
+
+            </div>
+
+            {/* Panel Row Total */}
+            <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-100">
+              <div>
+                <p className="text-xs text-gray-400">
+                  {bom.panel.qty || panelCount} panels × ₦{(bom.panel.unitPrice || 0).toLocaleString()}
+                </p>
+                {bom.panel.search && (
+                  <p className="text-xs text-gray-500 font-medium mt-0.5">{bom.panel.search}</p>
+                )}
+              </div>
+              <span className={`text-lg font-bold ${bom.panel.unitPrice > 0 ? "text-amber-600" : "text-gray-300"}`}>
+                ₦{((bom.panel.qty || panelCount) * (bom.panel.unitPrice || 0)).toLocaleString()}
+              </span>
+            </div>
+
+          </div>
+
+            </div>{/* end BOM wrapper */}
+
+          {/* Cable & Breaker Sizing */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+            <h3 className="font-bold text-gray-800 mb-4">Cable & Breaker Sizing</h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+
+              <div className="bg-gray-50 rounded-xl p-4">
+                <p className="text-xs font-semibold text-gray-500 mb-2">PV Array → Controller</p>
+                <p className="text-sm font-bold text-gray-800">Cable: <span className="text-amber-600">{pvCableSize} mm²</span></p>
+                <p className="text-sm font-bold text-gray-800">DC Breaker: <span className="text-amber-600">{pvBreaker} A</span></p>
+                <p className="text-xs text-gray-400 mt-1">Current: {pvCurrent.toFixed(1)} A</p>
+              </div>
+
+              <div className="bg-gray-50 rounded-xl p-4">
+                <p className="text-xs font-semibold text-gray-500 mb-2">Battery → Inverter</p>
+                <p className="text-sm font-bold text-gray-800">Cable: <span className="text-amber-600">{batteryCableSize} mm²</span></p>
+                <p className="text-sm font-bold text-gray-800">DC Breaker: <span className="text-amber-600">{batteryBreaker} A</span></p>
+                <p className="text-xs text-gray-400 mt-1">Current: {batteryCurrent.toFixed(1)} A</p>
+              </div>
+
+              <div className="bg-gray-50 rounded-xl p-4">
+                <p className="text-xs font-semibold text-gray-500 mb-2">Inverter AC Output</p>
+                <p className="text-sm font-bold text-gray-800">Cable: <span className="text-amber-600">{pvCableSize} mm²</span></p>
+                <p className="text-sm font-bold text-gray-800">AC Breaker: <span className="text-amber-600">{acBreaker} A</span></p>
+                <p className="text-xs text-gray-400 mt-1">@ 230V output</p>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      )}
     </div>
   );
 }
