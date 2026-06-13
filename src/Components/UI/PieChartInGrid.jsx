@@ -13,7 +13,7 @@ export default function PieChartInGrid() {
   return (
     <div className="w-full p-5 mt-4 bg-white rounded-2xl shadow-sm">
       
-      <h2 className="text-xl font-bold text-gray-800 mb-4">Project Status</h2>
+      <h2 className="text-xs sm:text-sm md:text-xl font-bold text-gray-800 mb-4">Project Status</h2>
 
       {/* Chart and Legend side by side */}
       <div className="flex flex-row items-center gap-4 ">

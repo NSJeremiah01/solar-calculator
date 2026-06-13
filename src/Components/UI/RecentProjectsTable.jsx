@@ -40,7 +40,7 @@ export default function RecentProjectsTable(){
  <Card className="w-full  p-6 bg-white mt-4 rounded-2xl shadow-sm">
   
  <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0 px-2 pt-2">
-  <CardTitle className="text-xl font-bold text-gray-900">Recent Project</CardTitle>
+  <CardTitle className="text-xs sm:text-sm md:text-xl font-bold text-gray-900">Recent Project</CardTitle>
   <Button variant="outline" className="text-sm font-medium border-gray-200 text-gray-700 rounded-xl px-4 py-2 hover:bg-gray-50 h-auto">
     View All Projects
   </Button>

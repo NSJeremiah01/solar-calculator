@@ -20,9 +20,9 @@ return(
    
    {/* Header Section */}
 
-   <div className="flex items-center justify-between mb-6">
-     <h2 className="text-xl font-bold text-gray-800">System Overview</h2>
-     <select className="px-3 py-1.5 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-600 focus:outline-none">
+   <div className="flex items-center gap-2 justify-between mb-6 wrap-break-word line-clamp-2">
+     <h2 className=" text-xs sm:text-sm md:text-xl font-bold text-gray-800">System Overview</h2>
+     <select className="px-0.5 sm:px-2 py-1.5 text-xs  sm:text-sm wrap-break-word line-clamp-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 focus:outline-none">
      <option >This Week</option>
      <option >This Month</option>
 
@@ -31,26 +31,26 @@ return(
 
    {/* METRICS GRID (4 PASTED COLUMN USING WHITESPACE-NOWRAP) */}
      
-     <div className="grid grid-cols-2 gap-6 mb-8 md:grid-cols-4 items-stretch">
+     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8 xl:grid-cols-4 items-stretch">
 
       {/* METRIC 1 */}
       <div className="flex flex-col gap-1 ">
        <div className="flex items-center gap-2">
          <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0"></span>
-         <p className="text-sm text-gray-500 font-medium whitespace-nowrap">Energy Produced</p>
+         <p className="text-sm text-gray-500 font-medium whitespace-nowrap wrap-break-word line-clamp-2">Energy Produced</p>
        </div>
-         <p className="pl-4 text-xl font-bold text-gray-900 whitespace-nowrap">4,562 <span className="text-sm font-normal text-gray-500 ">KWh</span></p>
+         <p className="pl-4 text-xl font-bold text-gray-900 whitespace-nowrap wrap-break-word line-clamp-2">4,562 <span className="text-sm font-normal text-gray-500 ">KWh</span></p>
       </div>
        
-       {/* METRIC 2 */}
+       {/* METRIC 2 */} 
 
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
-          <p className="text-sm text-gray-500 font-medium whitespace-nowrap">Energy Consumed</p>
+          <p className="text-sm text-gray-500 font-medium whitespace-nowrap wrap-break-word line-clamp-2">Energy Consumed</p>
 
         </div>
-         <p className="pl-4 text-xl font-bold text-gray-900 whitespace-nowrap">3,650 <span className="text-sm font-normal text-gray-500 ">KWh</span></p>
+         <p className="pl-4 text-xl font-bold text-gray-900 whitespace-nowrap wrap-break-word line-clamp-2">3,650 <span className="text-sm font-normal text-gray-500 ">KWh</span></p>
       </div>
      
      
@@ -60,10 +60,10 @@ return(
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full  bg-amber-400 shrink-0"></span>
-          <p className="text-sm text-gray-500 font-medium whitespace-nowrap">From Solar</p>
+          <p className="text-sm text-gray-500 font-medium whitespace-nowrap wrap-break-word line-clamp-2">From Solar</p>
 
         </div>
-         <p className="pl-4 text-xl font-bold text-gray-900 whitespace-nowrap">3,245 <span className="text-sm font-normal text-gray-500 ">KWh</span></p>
+         <p className="pl-4 text-xl font-bold text-gray-900 whitespace-nowrap wrap-break-word line-clamp-2">3,245 <span className="text-sm font-normal text-gray-500 ">KWh</span></p>
       </div>
 
  {/* METRIC 4 */}
@@ -71,10 +71,10 @@ return(
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0"></span>
-          <p className="text-sm text-gray-500 font-medium whitespace-nowrap">From Grid</p>
+          <p className="text-sm text-gray-500 font-medium whitespace-nowrap wrap-break-word line-clamp-2">From Grid</p>
 
         </div>
-         <p className="pl-4 text-xl font-bold text-gray-900 whitespace-nowrap">405 <span className="text-sm font-normal text-gray-500 ">KWh</span></p>
+         <p className="pl-4 text-xl font-bold text-gray-900 whitespace-nowrap wrap-break-word line-clamp-2">405 <span className="text-sm font-normal text-gray-500 ">KWh</span></p>
       </div>
 
      </div>

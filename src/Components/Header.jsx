@@ -59,28 +59,30 @@ function Header() {
 
       </div>
 
-      <div className='flex gap-6 '>
-     <span className='relative hidden sm:block'>
-      <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
-      <CiSearch  className='text-gray-400 text-xl'/>
-      </div>
-      <input type="text" placeholder='Serarch anything...' className='w-full pl-10 pr-4 py-1 mt-1.5 border border-gray-200 bg-gray-50 rounded-lg focus:outline-none focus:border-amber-400 ' />
-     </span>
+      <div className='flex gap-4 items-center px-2 justify-between'>
+        <span className=' relative  sm:block  items-center justify-center px-2 flex'>
+          <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
+            <CiSearch  className='text-gray-800 text-sm '/>
+          </div>
+          <div>
+            <input type="text" placeholder='Serarch anything...' className='w-full text-xs py-2 px-6 border border-gray-200 bg-gray-50 rounded-lg focus:outline-none focus:border-amber-400 ' />
+          </div>
+        </span>
      
-     <span className='flex items-center'>
-      <IoMdNotificationsOutline className='text-xl cursor-pointer hover:text-amber-500'/>
-     </span>
+        <span className='flex items-center'>
+          <IoMdNotificationsOutline className='text-xl cursor-pointer hover:text-amber-500'/>
+        </span>
 
-       <span className='flex gap-2'>
-        <div className='relative'>
-        <MdOnlinePrediction className='absolute bottom-0 right-0 text-xs bg-green-500 border border-white rounded-full z-10 animate-pulse text-yellow-600' />
-       <img src={ElecNova} alt="" className='w-10 h-10 object-cover mt-2 rounded-full bottom-2'  />
-       </div>
-       
-       <p className='text-[10px] relative top-3 font-bold'>Ndubuisi S.J. <br /><span className='text-gray-400'>Solar Engineer</span></p>
-       
-       <IoIosArrowDown className='relative top-5'/>
-       </span>
+        <span className='flex gap-2 relative items-center justify-center'>
+          <div className='relative'>
+            <MdOnlinePrediction className='absolute bottom-0 right-0 text-xs bg-green-500 border border-white rounded-full  animate-pulse text-yellow-600' />
+            <img src={ElecNova} alt="" className='w-10 h-10 object-cover  rounded-full '  />
+          </div>
+        
+          <p className='text-[10px] relative  font-bold'>Ndubuisi S.J. <br /><span className='text-gray-400'>Solar Engineer</span></p>
+        
+          <IoIosArrowDown className=''/>
+        </span>
       </div>
 
 

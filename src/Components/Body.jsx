@@ -29,14 +29,15 @@ function Body() {
   <div className="w-full px-4  overflow-x-hidden">
     <div className="flex items-center p-4 justify-between">
       <div className="">
-      <div className="flex items-center">
-        <h2 className="font-bold">Welcome back, Sunday!</h2> <MdFrontHand className="text-yellow-300" />
+      <div className="flex items-center relative">
+        <h2 className="font-bold text-xs sm:text-sm ">Welcome back, Sunday!</h2> 
+        <MdFrontHand className="text-yellow-300 text-sm" />
       </div>
       <div>
-        <p>Here's what's happening with your solar projects today.</p>
+        <p className="text-xs sm:text-sm ">Here's what's happening with your solar projects today.</p>
       </div>
    </div>
-    <div className=" text-left flex justify-start">
+    <div className=" text-left flex justify-start text-xs md:text-sm px-2 wrap-break-word line-clamp-2">
        <DateRangePicker
        startDate={start}
        endDate={end}
@@ -46,20 +47,20 @@ function Body() {
     </div>
 
   </div>
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-2 items-stretch ">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2 mb-2 items-stretch ">
       <div className="flex items-start gap-3 py-6 px-3 border  border-gray-100 rounded-lg shadow-sm bg-white">
         {/* Icon */}
         <span className="bg-[#a855f7]/20 rounded-full mt-1 p-2 shrink-0">
-          <GoProjectRoadmap className="text-[#a855f7] text-xs" />
+          <GoProjectRoadmap className="text-[#a855f7] text-xs w-full h-auto object-cover" />
         </span>
         {/* Text stack */}
         <div className="min-w-0 gap-2 flex flex-col">
-          <p className="text-xs text-gray-500">Total Projects</p>
-          <p className="text-xl font-bold">24</p>
+          <p className="text-xs text-gray-500 wrap-break-word line-clamp-2">Total Projects</p>
+          <p className="text-xl font-bold wrap-break-word line-clamp-2">24</p>
           <div className="flex items-center gap-0.5">
             <IoMdArrowDropup className="text-green-500 text-sm" />
             <span className="text-green-500 text-xs">12%</span>
-            <span className="text-gray-400 text-xs whitespace-nowrap">from last month</span>
+            <span className="text-gray-400 text-xs whitespace-nowrap wrap-break-word line-clamp-2">from last month</span>
           </div>
         </div>
       </div>
@@ -71,12 +72,12 @@ function Body() {
         </span>
         {/* Text stack */}
         <div className="min-w-0 gap-2 flex flex-col">
-          <p className="text-xs text-gray-500">System Size</p>
-          <p className="text-xl font-bold">128.4 <span className="text-xs ">kw</span></p>
+          <p className="text-xs text-gray-500 wrap-break-word line-clamp-2">System Size</p>
+          <p className="text-xl font-bold wrap-break-word line-clamp-2">128.4 <span className="text-xs ">kw</span></p>
           <div className="flex items-center gap-0.5">
             <IoMdArrowDropup className="text-green-500 text-sm" />
-            <span className="text-green-500 text-xs">18%</span>
-            <span className="text-gray-400 text-xs whitespace-nowrap">from last month</span>
+            <span className="text-green-500 text-xs  ">18%</span>
+            <span className="text-gray-400 text-xs whitespace-nowrap wrap-break-word line-clamp-2">from last month</span>
           </div>
         </div>
       </div>
@@ -89,12 +90,12 @@ function Body() {
         </span>
         {/* Text stack */}
         <div className="min-w-0 gap-2 flex flex-col">
-          <p className="text-xs text-gray-500">Monthly Savings</p>
-          <p className="text-xl font-bold">₦1,245,000</p>
+          <p className="text-xs text-gray-500 wrap-break-word line-clamp-2">Monthly Savings</p>
+          <p className="text-xl font-bold wrap-break-word line-clamp-2">₦1,245,000</p>
           <div className="flex items-center gap-0.5">
             <IoMdArrowDropup className="text-green-500 text-sm" />
             <span className="text-green-500 text-xs">15%</span>
-            <span className="text-gray-400 text-xs whitespace-nowrap">from last month</span>
+            <span className="text-gray-400 text-xs whitespace-nowrap wrap-break-word line-clamp-2">from last month</span>
           </div>
         </div>
       </div>
@@ -106,12 +107,12 @@ function Body() {
         </span>
         {/* Text stack */}
         <div className="min-w-0 gap-2 flex flex-col">
-          <p className="text-xs text-gray-500">CO₂ Reduction</p>
-          <p className="text-xl font-bold">12.8 Ton</p>
+          <p className="text-xs text-gray-500 wrap-break-word line-clamp-2">CO₂ Reduction</p>
+          <p className="text-xl font-bold wrap-break-word line-clamp-2">12.8 Ton</p>
           <div className="flex items-center gap-0.5">
             <IoMdArrowDropup className="text-green-500 text-sm" />
-            <span className="text-green-500 text-xs">15%</span>
-            <span className="text-gray-400 text-xs whitespace-nowrap">from last month</span>
+            <span className="text-green-500 text-xs ">15%</span>
+            <span className="text-gray-400 text-xs whitespace-nowrap wrap-break-word line-clamp-2">from last month</span>
           </div>
         </div>
       </div>
@@ -123,12 +124,12 @@ function Body() {
         </span>
         {/* Text stack */}
         <div className="min-w-0 gap-2 flex flex-col">
-          <p className="text-xs text-gray-500">Payback Period</p>
-          <p className="text-xl font-bold">3.6 Years</p>
+          <p className="text-xs text-gray-500 wrap-break-word line-clamp-2">Payback Period</p>
+          <p className="text-xl font-bold wrap-break-word line-clamp-2">3.6 Years</p>
           <div className="flex items-center gap-0.5">
             <MdArrowDropDown className="text-red-500 text-sm" />
-            <span className="text-red-500 text-xs">0.3</span>
-            <span className="text-gray-400 text-xs whitespace-nowrap">from last month</span>
+            <span className="text-red-500 text-xs ">0.3%</span>
+            <span className="text-gray-400 text-xs whitespace-nowrap wrap-break-word line-clamp-2">from last month</span>
           </div>
         </div>
       </div>

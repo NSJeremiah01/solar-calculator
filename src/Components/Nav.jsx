@@ -13,28 +13,28 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { IoHelpCircleOutline } from "react-icons/io5";
 import { FaCrown } from "react-icons/fa";
 
-
 function Nav() {
 
   return ( 
-    <>
-      <div className=" w-56 shrink-0 bg-white border-r border-gray-100 flex flex-col overflow-y-auto ">
+    <div>
+      <div className=" w-40 sm:w-56 shrink-0 bg-white border-r border-gray-100 flex flex-col overflow-y-auto ">
          <div className="flex items-center py-2 px-3 pr-12 font-bold rounded-xl bg-amber-500 w-fit gap-2 my-6 mx-4 text-xs cursor-pointer">
            <LuPlus />
             <p>New Project</p>
          </div>
-            
-            <div className="hidden md:flex items-center gap-1 text-xs flex-wrap " >
-              <div className="flex items-center gap-2 bg-amber-100 w-fit hover:text-amber-300 cursor-pointer pr-12 py-1 px-3 mx-4 rounded-xl">
-                 <GoHome />
-                 <p>Dashboard</p>
-              </div>
+          
+          <div className="flex items-center py-2 px-3 pr-12 font-bold rounded-xl bg-amber-100/40 hover:text-amber-300 w-fit gap-2 my-6 mx-4 text-xs cursor-pointer">
+           <GoHome className="shrink-0" /> <p>Dashboard</p>
+         </div>
 
-                <div className="px-6 flex flex-col gap-4 ">
-                <div className="flex items-center gap-2 hover:text-amber-300 cursor-pointer w-fit">
-                  <CiCalculator1 />
-                  <p>Load Calculator</p>
-                </div>
+
+                  <div className="px-6 flex flex-col gap-4 ">
+                  <div className="flex items-center gap-2 hover:text-amber-300 cursor-pointer w-fit">
+                    <CiCalculator1 />
+                    <p>Load Calculator</p>
+                  </div>
+
+
                   <div className="flex items-center gap-2 hover:text-amber-300 cursor-pointer w-fit">
                     <WiDaySunny />
                    <p>Solar Sizing</p>
@@ -81,7 +81,7 @@ function Nav() {
                    
                     <div className="flex items-center gap-2 hover:text-amber-300 cursor-pointer w-fit">
                      <IoHelpCircleOutline />
-                      <p>Help & Support</p>
+                      <p>Help {'&'} Support</p>
                     </div>
                     </div>
             </div>
@@ -112,7 +112,7 @@ function Nav() {
     
     
     
-    </>
+    
    );
 }
 

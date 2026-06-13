@@ -8,8 +8,8 @@ function Recommendations() {
   return ( 
     <div className="w-full  p-5 bg-white rounded-2xl shadow-sm">
       
-     <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-bold text-gray-800">System Recommendations</h2>
+     <div className="flex items-center justify-between mb-4 wrap-break-word line-clamp-2">
+        <h2 className="text-xs sm:text-sm md:text-xl font-bold text-gray-800">System Recommendations</h2>
         <select className="px-2 py-1 text-xs bg-gray-50 border border-gray-200 rounded-lg text-gray-600 focus:outline-none">
         <option >View All</option>
         <option >Select View</option>
@@ -21,12 +21,12 @@ function Recommendations() {
 
 
        <div className="flex flex-col gap-2   px-2 bg-white rounded-xl shadow-sm">
-          <div  className="flex items-start justify-between gap-2">
+          <div  className="flex items-start justify-between gap-2 wrap-break-word line-clamp-2">
             <div className="flex items-center gap-2">
               <RiBattery2ChargeLine className="text-emerald-600 text-xl shrink-0" />
-               <h3 className="text-sm font-semibold text-gray-900">Increase Battery Capacity</h3>
+               <h3 className="text-xs sm:text-sm font-semibold text-gray-900">Increase Battery Capacity</h3>
             </div>
-               <span className="text-xs px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded-md shrink-0">
+               <span className="text-xs px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded-md shrink-0 wrap-break-word line-clamp-2">
               Recommended
             </span>
           </div> 
@@ -42,12 +42,12 @@ function Recommendations() {
        </div>
 
  <div className="flex flex-col gap-2   px-2 bg-white rounded-xl shadow-sm">
-          <div  className="flex items-start justify-between gap-2">
+          <div  className="flex items-start justify-between gap-2 wrap-break-word line-clamp-2">
             <div className="flex items-center gap-2">
               <RiBattery2ChargeLine className="text-purple-600 text-xl shrink-0" />
-               <h3 className="text-sm font-semibold text-gray-900">Upgrade to MPPT Controller</h3>
+               <h3 className="text-xs sm:text-sm font-semibold text-gray-900">Upgrade to MPPT Controller</h3>
             </div>
-               <span className="text-xs px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded-md shrink-0">
+               <span className="text-xs px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded-md shrink-0 wrap-break-word line-clamp-2">
               Recommended
             </span>
           </div> 
