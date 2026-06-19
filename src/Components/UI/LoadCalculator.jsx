@@ -1,5 +1,9 @@
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import BOMPanel from "./BOM/BOMPanel";  
+import BOMBattery from "./BOM/BOMBattery";  
+import BOMInverter from "./BOM/BOMInverter"; 
+import BOMChargeController from "./BOM/BOMChargeController";
+import BOMInverterController from "./BOM/BOMInverterController";  
 // Default appliances list - common Nigerian household/office items
 const defaultAppliances = [
   { id: 1, name: "LED Bulb",        watts: 10,   qty: 6,  hours: 6  },
@@ -11,20 +15,7 @@ const defaultAppliances = [
 ];
 
    
-          // ── COMPONENT DATABASE ───────────────────────────────────
-    const panelDatabase = [
-      { brand: "Jinko Solar",      model: "Tiger Neo 400W",    watts: 400, price: 95000  },
-      { brand: "Jinko Solar",      model: "Tiger Neo 550W",    watts: 550, price: 125000 },
-      { brand: "Canadian Solar",   model: "HiKu6 400W",        watts: 400, price: 90000  },
-      { brand: "Canadian Solar",   model: "HiKu6 550W",        watts: 550, price: 118000 },
-      { brand: "Astronergy",       model: "CHSM400W Mono",     watts: 400, price: 85000  },
-      { brand: "Astronergy",       model: "CHSM550W Mono",     watts: 550, price: 110000 },
-      { brand: "BOVIET",           model: "BVM6610M 400W",     watts: 400, price: 82000  },
-      { brand: "BOVIET",           model: "BVM6610M 550W",     watts: 550, price: 105000 },
-      { brand: "Solarpro",         model: "300W Poly",         watts: 300, price: 65000  },
-      { brand: "Solarpro",         model: "200W Poly",         watts: 200, price: 45000  },
-    ];
-
+  
 export default function LoadCalculator() {
   const [appliances, setAppliances] = useState(defaultAppliances);
 
@@ -42,23 +33,6 @@ export default function LoadCalculator() {
 
 
 
-          const [bom, setBom] = useState({
-      // Panels
-      panel: {
-        search: "",
-        brand: "",
-        model: "",
-        watts: 400,
-        qty: 0,          // will be set from panelCount
-        unitPrice: 0,
-        isCustom: false,
-      },
-      // we'll add batteries, inverter etc. next
-    });
-
-  const updateBom = (field, value) => {
-    setBom((prev) => ({ ...prev, [field]: Number(value) }));
-  };
 
 
   const [config, setConfig] = useState({
@@ -83,7 +57,58 @@ export default function LoadCalculator() {
       return updated;
     });
   };
+      
+        // Sync bom panel watts when config panelWatts changes
+      useEffect(() => {
+        setBom((prev) => ({
+          ...prev,
+          panel: {
+            ...prev.panel,
+            watts: config.panelWatts,
+          }
+        }));
+      }, [config.panelWatts]);
 
+
+       
+          const [bom, setBom] = useState({
+      // Panels
+      panel: {
+        search: "",
+        brand: "",
+        model: "",
+        watts: config.panelWatts,
+        qty: 0,          // will be set from panelCount
+        unitPrice: 0,
+        isCustom: false,
+      },
+
+       battery: {
+      search: "", brand: "", model: "",
+      voltage: config.systemVoltage,
+      ah: 200, type: config.batteryType,
+      qty: 0, unitPrice: 0, isCustom: false,
+               },
+
+               inverter: {
+        search: "", brand: "", model: "",
+        kw: 0, type: "hybrid",
+        voltage: config.systemVoltage,
+        unitPrice: 0, isCustom: false,
+               },
+
+               chargeController: {
+          search: "", brand: "", model: "",
+          amps: 0, type: "mppt",
+          voltage: config.systemVoltage,
+          qty: 1, unitPrice: 0, isCustom: false,
+         },
+      // we'll add batteries, inverter etc. next
+    });
+
+    const updateBom = (field, value) => {
+      setBom((prev) => ({ ...prev, [field]: Number(value) }));
+    };
 
        // Panel search
 const [panelResults, setPanelResults] = useState([]);
@@ -666,160 +691,33 @@ const selectPanel = (panel) => {
             </span>
           </div>
 
-          {/* PANEL CARD */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="bg-amber-50 p-2 rounded-lg">☀️</span>
-              <div>
-                <h4 className="font-bold text-gray-800">Solar Panels</h4>
-                <p className="text-xs text-gray-400">
-                  System requires {panelCount} × {config.panelWatts}W = {totalArrayWatts}W array
-                </p>
-              </div>
-            </div>
+          {/* panel card */}
+          
+            <BOMPanel
+            panelCount={panelCount}
+            totalArrayWatts={totalArrayWatts}
+            bom={bom}
+            setBom={setBom}
+              />
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <BOMBattery
+            batteryAh={batteryAh}
+            systemVoltage={config.systemVoltage}
+            bom={bom}
+            setBom={setBom}
+            />
 
-              {/* Search */}
-              <div className="flex flex-col gap-1 relative">
-                <label className="text-xs font-medium text-gray-500">Search Panel</label>
-                <input
-                  type="text"
-                  className="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-amber-400"
-                  placeholder="e.g. Jinko 400W or Canadian Solar..."
-                  value={bom.panel.search}
-                  onChange={(e) => searchPanels(e.target.value)}
-                />
-                {/* Dropdown results */}
-                {showPanelResults && panelResults.length > 0 && (
-                  <div className="absolute top-16 left-0 right-0 bg-white border border-gray-200 rounded-xl shadow-lg z-10 max-h-48 overflow-y-auto">
-                    {panelResults.map((p, i) => (
-                      <div
-                        key={i}
-                        onClick={() => selectPanel(p)}
-                        className="flex items-center justify-between px-4 py-2.5 hover:bg-amber-50 cursor-pointer border-b border-gray-50 last:border-0"
-                      >
-                        <div>
-                          <p className="text-sm font-semibold text-gray-800">{p.brand}</p>
-                          <p className="text-xs text-gray-400">{p.model}</p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-xs font-bold text-amber-600">{p.watts}W</p>
-                          <p className="text-xs text-gray-400">₦{p.price.toLocaleString()}</p>
-                        </div>
-                      </div>
-                    ))}
-                    {/* Custom option always at bottom */}
-                    <div
-                      onClick={() => {
-                        setBom((prev) => ({ ...prev, panel: { ...prev.panel, isCustom: true } }));
-                        setShowPanelResults(false);
-                      }}
-                      className="flex items-center gap-2 px-4 py-2.5 hover:bg-gray-50 cursor-pointer text-blue-600"
-                    >
-                      <span className="text-xs">+ Enter custom panel not in database</span>
-                    </div>
-                  </div>
-                )}
-                {/* No results */}
-                {showPanelResults && panelResults.length === 0 && bom.panel.search.length >= 2 && (
-                  <div className="absolute top-16 left-0 right-0 bg-white border border-gray-200 rounded-xl shadow-lg z-10 p-3">
-                    <p className="text-xs text-gray-400 mb-2">No panels found in database.</p>
-                    <div
-                      onClick={() => {
-                        setBom((prev) => ({ ...prev, panel: { ...prev.panel, isCustom: true } }));
-                        setShowPanelResults(false);
-                      }}
-                      className="text-xs text-blue-600 cursor-pointer hover:underline"
-                    >
-                      + Add custom panel manually
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Brand & Model - shows when custom */}
-              {bom.panel.isCustom && (
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-medium text-gray-500">Brand & Model</label>
-                  <input
-                    type="text"
-                    className="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-amber-400"
-                    placeholder="e.g. Solarpro 400W Mono"
-                    value={bom.panel.model}
-                    onChange={(e) =>
-                      setBom((prev) => ({ ...prev, panel: { ...prev.panel, model: e.target.value } }))
-                    }
-                  />
-                </div>
-              )}
-
-              {/* Wattage */}
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-medium text-gray-500">Panel Wattage (W)</label>
-                <input
-                  type="number"
-                  className="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-amber-400"
-                  value={bom.panel.watts}
-                  onChange={(e) =>
-                    setBom((prev) => ({ ...prev, panel: { ...prev.panel, watts: Number(e.target.value) } }))
-                  }
-                />
-              </div>
-
-              {/* Quantity */}
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-medium text-gray-500">
-                  Quantity
-                  <span className="text-gray-400 font-normal ml-1">(auto from sizing)</span>
-                </label>
-                <input
-                  type="number"
-                  className="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-amber-400"
-                  value={bom.panel.qty || panelCount}
-                  onChange={(e) =>
-                    setBom((prev) => ({ ...prev, panel: { ...prev.panel, qty: Number(e.target.value) } }))
-                  }
-                />
-              </div>
-
-              {/* Unit Price */}
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-medium text-gray-500">Unit Price (₦)</label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">₦</span>
-                  <input
-                    type="number"
-                    className="text-sm bg-gray-50 border border-gray-200 rounded-lg pl-6 pr-3 py-2 focus:outline-none focus:border-amber-400 w-full"
-                    placeholder="0"
-                    value={bom.panel.unitPrice || ""}
-                    onChange={(e) =>
-                      setBom((prev) => ({ ...prev, panel: { ...prev.panel, unitPrice: Number(e.target.value) } }))
-                    }
-                  />
-                </div>
-              </div>
-
-            </div>
-
-            {/* Panel Row Total */}
-            <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-100">
-              <div>
-                <p className="text-xs text-gray-400">
-                  {bom.panel.qty || panelCount} panels × ₦{(bom.panel.unitPrice || 0).toLocaleString()}
-                </p>
-                {bom.panel.search && (
-                  <p className="text-xs text-gray-500 font-medium mt-0.5">{bom.panel.search}</p>
-                )}
-              </div>
-              <span className={`text-lg font-bold ${bom.panel.unitPrice > 0 ? "text-amber-600" : "text-gray-300"}`}>
-                ₦{((bom.panel.qty || panelCount) * (bom.panel.unitPrice || 0)).toLocaleString()}
-              </span>
-            </div>
-
-          </div>
-
+             <BOMInverterController
+              inverterKw={inverterKw}
+              inverterSize={inverterSize}
+              chargeControllerAmps={chargeControllerAmps}
+              systemVoltage={config.systemVoltage}
+              bom={bom}
+              setBom={setBom}
+              />
             </div>{/* end BOM wrapper */}
+
+            
 
           {/* Cable & Breaker Sizing */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
